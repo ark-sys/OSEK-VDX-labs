@@ -1,0 +1,87 @@
+OIL_VERSION = "2.5";
+
+IMPLEMENTATION trampoline {
+
+    /* This fix the default STACKSIZE of tasks */
+    TASK {
+        UINT32 STACKSIZE = 32768 ;
+    } ;
+
+    /* This fix the default STACKSIZE of ISRs */
+    ISR {
+        UINT32 STACKSIZE = 32768 ;
+    } ;
+};
+
+CPU only_one_periodic_task {
+  OS config {
+    STATUS = EXTENDED;
+    PRETASKHOOK = TRUE;
+    POSTTASKHOOK = TRUE;
+	TRACE = TRUE {
+		FORMAT = json;
+		PROC = TRUE;
+        RESOURCE = TRUE;
+        ALARM = FALSE;
+        EVENT = TRUE;
+    };
+    BUILD = TRUE {
+      APP_SRC = "tp_test.c";
+      APP_SRC = "../ecrobot_emul.c";
+      TRAMPOLINE_BASE_PATH = "../../../";
+      CFLAGS="-ggdb";
+      APP_NAME = "tp_test_exe";
+      LINKER = "gcc";
+      SYSTEM = PYTHON;
+    };
+  };
+
+  APPMODE stdAppmode {};
+
+
+  TASK a_task {
+    PRIORITY = 2;
+    AUTOSTART = TRUE {
+      APPMODE = stdAppmode;
+    };
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+  };
+
+  TASK another_task {
+    PRIORITY = 2;
+     AUTOSTART = FALSE;
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+  };
+
+  TASK another_cool_task {
+    PRIORITY = 2;
+    AUTOSTART = FALSE;
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+  };
+
+
+  ISR a_interrupt {
+     SOURCE = SIGTERM;
+     CATEGORY = 2;
+     PRIORITY = 3;
+  };
+
+  ISR b_interrupt {
+     SOURCE = SIGTRAP;
+     CATEGORY = 2;
+     PRIORITY = 2;
+  };
+
+  TASK stop {
+    PRIORITY = 1;
+     AUTOSTART = TRUE {
+          APPMODE = stdAppmode;
+        };
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+  };
+
+};

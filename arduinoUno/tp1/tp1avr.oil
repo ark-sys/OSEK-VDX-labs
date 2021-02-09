@@ -1,0 +1,78 @@
+/* Running the following example:
+ * just call goil a first time using the command line:
+ * goil --target=avr/arduino/uno --templates=../../../../goil/templates/ blink.oil
+ * you may have to update ARDUINO section (l.13) for your configuration.
+ *
+ */
+
+OIL_VERSION = "2.5" : "test" ;
+
+CPU test {
+  OS config {
+    STATUS = STANDARD;
+    BUILD = TRUE {
+      TRAMPOLINE_BASE_PATH = "../../..";
+      APP_NAME = "tp1test";
+      APP_SRC = "tp1avr.cpp";
+      CPPCOMPILER = "avr-g++";
+      COMPILER = "avr-gcc";
+      LINKER = "avr-gcc";
+      ASSEMBLER = "avr-gcc";
+      COPIER = "avr-objcopy";
+      SYSTEM = PYTHON;
+
+      LIBRARY = serial;
+      LIBRARY = advancedIO;
+    };
+    SYSTEM_CALL = TRUE;
+  };
+
+  APPMODE stdAppmode {};
+
+  ALARM navigationAl {
+    COUNTER= SystemCounter;
+    ACTION = ACTIVATETASK {
+      TASK = navigation;
+    };
+    AUTOSTART = TRUE {
+      ALARMTIME = 200;
+      CYCLETIME = 200; //activated each 200 ms
+      APPMODE = stdAppmode;
+    };
+  };
+
+  ALARM distanceAl {
+    COUNTER = SystemCounter;
+    ACTION = ACTIVATETASK {
+    TASK = distance_detection;
+    };
+    AUTOSTART = TRUE {
+      APPMODE = stdAppmode;
+      ALARMTIME = 300;
+      CYCLETIME = 300;
+      };
+  };
+
+  RESOURCE distVal {
+    RESOURCEPROPERTY = STANDARD;
+  };
+
+  TASK distance_detection {
+    PRIORITY = 20;
+    AUTOSTART = FALSE;
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+    RESOURCE = distVal;
+    STACKSIZE = 256;
+  };
+
+  TASK navigation {
+    PRIORITY = 20;
+    AUTOSTART = FALSE;
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+    RESOURCE = distVal;
+    STACKSIZE = 256;
+  };
+
+};

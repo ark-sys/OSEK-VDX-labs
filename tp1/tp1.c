@@ -13,10 +13,6 @@ int main(void)
     StartOS(OSDEFAULTAPPMODE);
     return 0;
 }
-DeclareAlarm(alarm_contact);
-DeclareAlarm(alarm_distance);
-DeclareAlarm(alarm_nav);
-DeclareAlarm(alarm_stop);
 
 void PreTaskHook(void)
 {
@@ -53,7 +49,7 @@ TASK(detection_contact)
 
     }
 
-TASK(detection_distance)
+TASK(distance_detection)
     {
     GetResource(distance_val);
 

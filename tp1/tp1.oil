@@ -48,7 +48,7 @@ CPU only_one_periodic_task {
 
   ALARM alarm_distance {
     COUNTER = SystemCounter;
-    ACTION = ACTIVATETASK { TASK = detection_distance; };
+    ACTION = ACTIVATETASK { TASK = distance_detection; };
     AUTOSTART = TRUE { APPMODE = stdAppmode; ALARMTIME = 10; CYCLETIME = 300; };
   };
 

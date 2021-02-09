@@ -28,7 +28,7 @@ CPU only_one_periodic_task {
     BUILD = TRUE {
       APP_SRC = "tp_test.c";
       APP_SRC = "../ecrobot_emul.c";
-      TRAMPOLINE_BASE_PATH = "../../../";
+      TRAMPOLINE_BASE_PATH = "../../";
       CFLAGS="-ggdb";
       APP_NAME = "tp_test_exe";
       LINKER = "gcc";

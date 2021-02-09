@@ -1,0 +1,9 @@
+tp1.oil: \
+ /media/sf_ITR/TP/trampoline/goil/templates/config/config.oil \
+ /media/sf_ITR/TP/trampoline/goil/templates/config/kernel.oil \
+ /media/sf_ITR/TP/trampoline/goil/templates/config/api.oil \
+ /media/sf_ITR/TP/trampoline/goil/templates/config/api_STM.oil \
+ /media/sf_ITR/TP/trampoline/goil/templates/config/api_ioc.oil \
+ /media/sf_ITR/TP/trampoline/goil/templates/config/posix/config.oil \
+ /media/sf_ITR/TP/trampoline/goil/templates/config/posix/linux/config.oil \
+ /media/sf_ITR/TP/trampoline/goil/templates/config/config2.5.oil

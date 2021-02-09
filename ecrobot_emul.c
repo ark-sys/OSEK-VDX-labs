@@ -55,7 +55,7 @@ U16 ecrobot_get_light_sensor(U8 port_id) {
 /* -------------------- */
 U8 ecrobot_get_touch_sensor(U8 port_id) {
   if (port_id < NXT_N_SENSORS) {
-    return random() * 2;
+    return random() % 2;
   }
   return 0;
 }
@@ -64,7 +64,7 @@ U8 ecrobot_get_touch_sensor(U8 port_id) {
 /* -------------------- */
 U16 ecrobot_get_sound_sensor(U8 port_id) {
   if (port_id < NXT_N_SENSORS) {
-    return random() * 1024;
+    return random() % 1024;
   }
   return 0;
 }
@@ -76,7 +76,7 @@ void ecrobot_init_sonar_sensor(U8 port_id) {
 }
 S32 ecrobot_get_sonar_sensor(U8 port_id) {
   if (port_id < NXT_N_SENSORS) {
-    return random() * 256 - 1;
+    return random() % 255;
   }
   return -1;
 }

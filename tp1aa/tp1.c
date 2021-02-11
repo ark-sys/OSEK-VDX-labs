@@ -5,8 +5,10 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
+#include <sys/time.h>
 
 int distance_val = 0;
+struct timespec current_time;
 
 int main(void)
 {
@@ -39,22 +41,21 @@ TASK(detection_contact)
     {
 
     if (ecrobot_get_touch_sensor(NXT_PORT_S1)==1){
-       GetResource(distance_val);
+       GetResource(distVal);
 
        distance_val = 0;
-       ReleaseResource(distance_val);
+       ReleaseResource(distVal);
     }
 
     TerminateTask();
-
     }
 
 TASK(distance_detection)
     {
-    GetResource(distance_val);
+    GetResource(distVal);
 
     distance_val = ecrobot_get_sonar_sensor(NXT_PORT_S2);
-    ReleaseResource(distance_val);
+    ReleaseResource(distVal);
 
 
     TerminateTask();
@@ -64,16 +65,16 @@ TASK(distance_detection)
 TASK(navigation)
     {
 
-      GetResource(distance_val);
-
-      printf("Distance is %d\r\n", distance_val);
+      GetResource(distVal);
+      clock_gettime(CLOCK_MONOTONIC_RAW, &current_time);
+      printf("%lu Distance is %d\r\n",(current_time.tv_sec*1000000+current_time.tv_nsec/1000000), distance_val);
 
       if (distance_val == 0 ){
           printf("marche arriere\r\n");
         } else if (distance_val < 50){
           printf("tourner\r\n");
         }
-      ReleaseResource(distance_val);
+      ReleaseResource(distVal);
 
 
     TerminateTask();

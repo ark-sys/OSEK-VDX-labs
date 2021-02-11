@@ -64,17 +64,23 @@ CPU only_one_periodic_task {
     AUTOSTART = TRUE { APPMODE = stdAppmode; ALARMTIME = 10000; CYCLETIME = 100; };
   };
 
+  RESOURCE distVal {
+    RESOURCEPROPERTY = STANDARD;
+  };
+
   TASK detection_contact {
     PRIORITY = 2;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
+    RESOURCE = distVal;
     SCHEDULE = FULL;
   };
 
-  TASK detection_distance {
+  TASK distance_detection {
     PRIORITY = 2;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
+    RESOURCE = distVal;
     SCHEDULE = FULL;
   };
 
@@ -82,6 +88,7 @@ CPU only_one_periodic_task {
     PRIORITY = 2;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
+    RESOURCE = distVal;
     SCHEDULE = FULL;
   };
 

@@ -46,7 +46,7 @@ void ecrobot_set_light_sensor_inactive(U8 port_id) {
 }
 U16 ecrobot_get_light_sensor(U8 port_id) {
   if (port_id < NXT_N_SENSORS) {
-    return random() * 1024;
+    return random() % 1024;
   }
   return 0;
 }

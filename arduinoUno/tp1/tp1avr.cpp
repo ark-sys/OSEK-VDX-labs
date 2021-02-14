@@ -21,7 +21,7 @@
 #define SERVO_MAX 135
 
 Servo servo; // declaring servo motor
-unsigned char periodCounter = 0; // count number of period, if periodCounter==10 then take random direction
+unsigned char periodCounter = 0; // count number of periods, if periodCounter==9 then take random direction
 long distance_val = 0; // value of distance retrieved by sonar
 unsigned int orientation = 90; // Servo at center position
 
@@ -97,6 +97,8 @@ TASK(navigation)
      * */
     if(distance_val == 0){
       Serial.println("Reversing");
+      digitalWrite(RED_LED, HIGH);
+      digitalWrite(BLUE_LED, LOW);
     }else {
         /*
          * If distance is <50cm then turn red led on and turn off the blue led

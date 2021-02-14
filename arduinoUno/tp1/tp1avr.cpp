@@ -2,11 +2,12 @@
 #include "Arduino.h"
 #include "../mylib/Servo.h"
 
-#define TRIG_PIN 7
-#define ECHO_PIN 6
-#define RED_LED 3
-#define BLUE_LED 2
-#define BUZZ_PIN 13
+#define TRIG_PIN 3
+#define ECHO_PIN 2
+#define RED_LED 13
+#define BLUE_LED 12
+#define BUZZ_PIN 11
+#define IMPACT_PIN 4
 
 #define ASTEP 8
 #define BSTEP 9
@@ -14,15 +15,18 @@
 #define DSTEP 11
 #define STEP_DELAY 1
 
-#define SERVO_PIN 5
+#define SERVO_PIN 4
 #define SERVO_MIN 45
 #define SERVO_CENTER 90
 #define SERVO_MAX 135
 
-unsigned char periodCounter = 0;
-long distance_val = 0;
+Servo servo; // declaring servo motor
+unsigned char periodCounter = 0; // count number of period, if periodCounter==10 then take random direction
+long distance_val = 0; // value of distance retrieved by sonar
 unsigned int orientation = 90; // Servo at center position
-Servo servo;
+
+unsigned long currTimer; // Value used for timestamping
+int buttonState = 0;
 
 void setup()
 {
@@ -38,14 +42,11 @@ void setup()
     // initialize buzzer pin
     pinMode(BUZZ_PIN, OUTPUT);
 
-    // initialize step motor pin
-    pinMode(ASTEP, OUTPUT);
-    pinMode(BSTEP, OUTPUT);
-    pinMode(CSTEP, OUTPUT);
-    pinMode(DSTEP, OUTPUT);
+    // initialize button pin (emulates collision sensor)
+    pinMode(IMPACT_PIN, INPUT);
 
-    servo.attach(SERVO_PIN);
-    servo.write(90);
+//    servo.attach(SERVO_PIN);
+//    servo.write(90);
     Serial.begin(9600);
 }
 
@@ -67,69 +68,54 @@ void doTheBuzz(){
   delay(100);
 }
 
-void coilspin(int a,int b,int c,int d){
-  digitalWrite(ASTEP,a);
-  digitalWrite(BSTEP,b);
-  digitalWrite(CSTEP,c);
-  digitalWrite(DSTEP,d);
-}
-
-void onestep(){
-  coilspin(1,0,0,0);
-  delay(STEP_DELAY);
-  coilspin(1,1,0,0);
-  delay(STEP_DELAY);
-  coilspin(0,1,0,0);
-  delay(STEP_DELAY);
-  coilspin(0,1,1,0);
-  delay(STEP_DELAY);
-  coilspin(0,0,1,0);
-  delay(STEP_DELAY);
-  coilspin(0,0,1,1);
-  delay(STEP_DELAY);
-  coilspin(0,0,0,1);
-  delay(STEP_DELAY);
-  coilspin(1,0,0,1);
-  delay(STEP_DELAY);
-}
-
 
 
 
 TASK(navigation)
     {
-
+    // retrieve mutex
     GetResource(distVal);
-
-    Serial.print("Current distance is ");
+    /* get current time and distance and send message via serial port*/
+    currTimer = millis();
+    Serial.print(currTimer);
+    Serial.print("ms - Distance :  ");
     Serial.println(distance_val);
 
-    if(periodCounter == 10){
+    /* if this is the tenth period, then chose a random orientation for main wheel */
+    if(periodCounter == 9){
       periodCounter = 0;
-      orientation = random(SERVO_MIN,SERVO_MAX);
-      servo.write(orientation);
+
+/*      orientation = random(SERVO_MIN,SERVO_MAX);
+      servo.write(orientation);*/
+      Serial.println("Taking random direction...");
     } else {
       periodCounter += 1;
     }
 
+    /*
+     * if current distance is equal to zero, then Reverse and take a different path
+     * */
     if(distance_val == 0){
-
+      Serial.println("Reversing");
     }else {
-
+        /*
+         * If distance is <50cm then turn red led on and turn off the blue led
+         * else, keep the blue led on
+         * */
         if(distance_val < 50 ){
+          /*  */
           if(distance_val < 20){
             doTheBuzz();
+            Serial.println("Imminent collision!");
           }
-          servo.write(orientation);
+//          servo.write(orientation);
           digitalWrite(RED_LED, HIGH);
           digitalWrite(BLUE_LED, LOW);
         } else {
-
-          onestep();
           digitalWrite(RED_LED, LOW);
           digitalWrite(BLUE_LED, HIGH);
         }
-
+    // go forward
 
     }
 
@@ -143,18 +129,42 @@ TASK(distance_detection)
 
     unsigned long lecture_echo = 0;
 
-    GetResource(distVal);
+    GetResource(contactState);
+    if(buttonState == HIGH){
 
-    digitalWrite(TRIG_PIN, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(TRIG_PIN, LOW);
-    delayMicroseconds(10);
+      GetResource(distVal);
 
-    lecture_echo = pulseIn(ECHO_PIN, HIGH, 1000000L);
+      digitalWrite(TRIG_PIN, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(TRIG_PIN, LOW);
+      delayMicroseconds(10);
 
-    distance_val = lecture_echo * 0.034 / 2;
+      lecture_echo = pulseIn(ECHO_PIN, HIGH, 1000000L);
 
-    ReleaseResource(distVal);
+      distance_val = lecture_echo * 0.034 / 2;
+
+      ReleaseResource(distVal);
+
+    }
+    ReleaseResource(contactState);
+
 
     TerminateTask();
+    }
+
+TASK(contact_detection)
+    {
+      GetResource(contactState);
+      buttonState = digitalRead(IMPACT_PIN);
+
+      if(buttonState == LOW){
+        GetResource(distVal);
+        distance_val = 0;
+        ReleaseResource(distVal);
+      }
+
+      ReleaseResource(contactState);
+
+      TerminateTask();
+
     }

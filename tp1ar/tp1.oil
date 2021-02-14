@@ -40,22 +40,22 @@ CPU only_one_periodic_task {
 
   APPMODE stdAppmode {};
 
-  ALARM alarm_contact {
+  ALARM contactAl {
     COUNTER = SystemCounter;
     ACTION = ACTIVATETASK { TASK = contact_detection; };
-    AUTOSTART = TRUE { APPMODE = stdAppmode; ALARMTIME = 10; CYCLETIME = 100; };
+    AUTOSTART = FALSE;
   };
 
-  ALARM alarm_distance {
+  ALARM distanceAl {
     COUNTER = SystemCounter;
     ACTION = ACTIVATETASK { TASK = distance_detection; };
-    AUTOSTART = TRUE { APPMODE = stdAppmode; ALARMTIME = 10; CYCLETIME = 300; };
+    AUTOSTART = FALSE;
   };
 
-  ALARM alarm_nav {
+  ALARM navigationAl {
     COUNTER = SystemCounter;
     ACTION = ACTIVATETASK { TASK = navigation; };
-    AUTOSTART = TRUE { APPMODE = stdAppmode; ALARMTIME = 10; CYCLETIME = 200; };
+    AUTOSTART = FALSE;
   };
 
   ALARM alarm_stop {

@@ -54,12 +54,37 @@ CPU test {
       };
   };
 
+  ALARM contactAl {
+    COUNTER = SystemCounter;
+    ACTION = ACTIVATETASK {
+    TASK = contact_detection;
+    };
+    AUTOSTART = TRUE {
+      APPMODE = stdAppmode;
+      ALARMTIME = 100;
+      CYCLETIME = 100;
+      };
+  };
+
   RESOURCE distVal {
+    RESOURCEPROPERTY = STANDARD;
+  };
+  RESOURCE contactState {
     RESOURCEPROPERTY = STANDARD;
   };
 
   TASK distance_detection {
-    PRIORITY = 20;
+    PRIORITY = 2;
+    AUTOSTART = FALSE;
+    ACTIVATION = 1;
+    SCHEDULE = FULL;
+    RESOURCE = distVal;
+    RESOURCE = contactState;
+    STACKSIZE = 256;
+  };
+
+  TASK navigation {
+    PRIORITY = 2;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
     SCHEDULE = FULL;
@@ -67,12 +92,13 @@ CPU test {
     STACKSIZE = 256;
   };
 
-  TASK navigation {
-    PRIORITY = 20;
+  TASK contact_detection {
+    PRIORITY = 2;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
     SCHEDULE = FULL;
     RESOURCE = distVal;
+    RESOURCE = contactState;
     STACKSIZE = 256;
   };
 

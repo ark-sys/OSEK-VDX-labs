@@ -37,6 +37,12 @@ void ShutdownHook(void){
   ecrobot_term_sonar_sensor(NXT_PORT_S2);
 }
 
+DeclareAlarm(contactAl);
+DeclareAlarm(distanceAl);
+DeclareAlarm(navigationtAl);
+DeclareAlarm(alarm_stop);
+
+
 TASK(contact_detection)
     {
 

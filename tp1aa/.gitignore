@@ -1,0 +1,8 @@
+*~
+build/
+tp1/
+*.py
+*.o
+tp1_exe
+*.json
+*.dep

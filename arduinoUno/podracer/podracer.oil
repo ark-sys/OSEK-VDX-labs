@@ -85,7 +85,7 @@ CPU test {
   };
 
   TASK navigation {
-    PRIORITY = 3;
+    PRIORITY = 2;
     AUTOSTART = FALSE;
     ACTIVATION = 1;
     SCHEDULE = FULL;

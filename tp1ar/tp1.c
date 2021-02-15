@@ -31,17 +31,14 @@ void PostTaskHook(void)
 }
 void StartupHook(void){
   ecrobot_init_sonar_sensor(NXT_PORT_S2);
+  SetRelAlarm(contactAl, 100, 100);
+  SetRelAlarm(distanceAl, 300, 300);
+  SetRelAlarm(navigationAl, 200, 200);
 }
 
 void ShutdownHook(void){
   ecrobot_term_sonar_sensor(NXT_PORT_S2);
 }
-
-DeclareAlarm(contactAl);
-DeclareAlarm(distanceAl);
-DeclareAlarm(navigationtAl);
-DeclareAlarm(alarm_stop);
-
 
 TASK(contact_detection)
     {

@@ -4,7 +4,7 @@ STEP 0:
 
 STEP 0.bis:
 - setup your compilation environment 
-  - ```build``` the OIL compiler by following the instructions of goil/README.md in trampoline root folder [README.md](goil/README.md)
+  - ```build``` the OIL compiler by following the instructions of goil/README.md in trampoline root folder <a href="https://github.com/TrampolineRTOS/trampoline/tree/master/goil" target="_blank">README.md</a> 
   - export path to newly built GOIL for future uses 
     - ``export TRAMPOLINE_ROOT=<path to your trampoline folder>``
     - ``export VIPER_PATH=$TRAMPOLINE_ROOT/viper``

@@ -1,4 +1,4 @@
-#include "../ecrobot_emul.h"
+#include "../../machines/avr/arduino/libraries/ecrobotEmul/ecrobot_emul.h"
 #include "tpl_os.h"
 #include "tpl_posixvp_irq_gen.h"
 #include <stdbool.h>

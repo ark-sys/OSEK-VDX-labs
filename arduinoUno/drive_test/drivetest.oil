@@ -12,8 +12,8 @@ CPU test {
     STATUS = STANDARD;
     BUILD = TRUE {
       TRAMPOLINE_BASE_PATH = "../../..";
-      APP_NAME = "podracer_exe";
-      APP_SRC = "podracer.cpp";
+      APP_NAME = "drivetest_exe";
+      APP_SRC = "drivetest.cpp";
       CPPCOMPILER = "avr-g++";
       COMPILER = "avr-gcc";
       LINKER = "avr-gcc";
@@ -24,7 +24,6 @@ CPU test {
 
       LIBRARY = serial;
       LIBRARY = advancedIO;
-      LIBRARY = ecrobotEmul;
       LIBRARY = Drive;
 
     };
@@ -45,48 +44,11 @@ CPU test {
     };
   };
 
-  ALARM distanceAl {
-    COUNTER = SystemCounter;
-    ACTION = ACTIVATETASK {
-    TASK = distance_detection;
-    };
-    AUTOSTART = TRUE {
-      APPMODE = stdAppmode;
-      ALARMTIME = 300;
-      CYCLETIME = 300;
-      };
-  };
-
-  ALARM contactAl {
-    COUNTER = SystemCounter;
-    ACTION = ACTIVATETASK {
-    TASK = contact_detection;
-    };
-    AUTOSTART = TRUE {
-      APPMODE = stdAppmode;
-      ALARMTIME = 100;
-      CYCLETIME = 100;
-      };
-  };
 
   RESOURCE distVal {
     RESOURCEPROPERTY = STANDARD;
   };
 
-  RESOURCE contactState {
-    RESOURCEPROPERTY = STANDARD;
-  };
-
-
-  TASK distance_detection {
-    PRIORITY = 2;
-    AUTOSTART = FALSE;
-    ACTIVATION = 1;
-    SCHEDULE = FULL;
-    RESOURCE = distVal;
-    RESOURCE = contactState;
-    STACKSIZE = 256;
-  };
 
   TASK navigation {
     PRIORITY = 2;
@@ -97,23 +59,4 @@ CPU test {
     STACKSIZE = 256;
   };
 
-  TASK contact_detection {
-    PRIORITY = 2;
-    AUTOSTART = FALSE;
-    ACTIVATION = 1;
-    SCHEDULE = FULL;
-    RESOURCE = distVal;
-    RESOURCE = contactState;
-    STACKSIZE = 256;
-  };
-
-
-  TASK guidance{
-      PRIORITY = 2;
-      AUTOSTART = FALSE;
-      ACTIVATION = 1;
-      SCHEDULE = FULL;
-      RESOURCE = distVal;
-      STACKSIZE = 256;
-  };
 };

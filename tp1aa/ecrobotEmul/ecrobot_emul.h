@@ -27,6 +27,7 @@ typedef enum {
 	NXT_PORT_S4
 } SENSOR_PORT_T;
 
+
 /* NXT servo motor API */
 extern int  nxt_motor_get_count(U32 n);
 extern void nxt_motor_set_count(U32 n, int count);
